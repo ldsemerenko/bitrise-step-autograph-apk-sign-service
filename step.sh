@@ -16,13 +16,17 @@ for i in "${apkPaths[@]}"; do
   fi
 
   apkBasename=$(basename "${i}")
-  if [[ ! ${apkBasename} == *"unsigned"* ]]; then
+  if [[ ${apkBasename} == *".aab" ]]; then
+    signedApkName="${apkBasename/.aab/-signed-aligned.aab}"
+    echo "AAB found: ${i}"
+  elif [[ ! ${apkBasename} == *"unsigned"* ]]; then
     echo "APK not unsigned: ${apkBasename}"
     continue
+  else
+    signedApkName="${apkBasename/unsigned/signed-aligned}"
   fi
 
   apkBasePath=$(dirname "${i}")
-  signedApkName="${apkBasename/unsigned/signed-aligned}"
 
   #   setup output signed-aligned-apkpath
   signedApkPath="${apkBasePath}/${signedApkName}"
